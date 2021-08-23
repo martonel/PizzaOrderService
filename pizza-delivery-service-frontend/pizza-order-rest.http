@@ -1,0 +1,33 @@
+POST http://localhost:8080/api/pizzaOrder
+Content-Type: application/json
+
+{
+  "name": "chilis",
+  "description": "chilis pizza",
+  "value": "1500"
+}
+
+###
+
+PUT http://localhost:8080/api/pizzaOrder
+Content-Type: application/json
+
+{
+  "id": 10,
+  "name": "chilis",
+  "description": "nagyon chilis pizza",
+  "value": "1500"
+}
+
+###
+GET http://localhost:8080/api/pizzaOrder
+Accept: application/json
+
+###
+
+DELETE http://localhost:8080/api/pizzaOrder/7
+Accept: application/json
+
+###
+
+

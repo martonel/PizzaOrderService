@@ -1,0 +1,31 @@
+POST http://localhost:8080/api/appUser
+Content-Type: application/json
+
+{
+  "username": "rest",
+  "password": "rest",
+  "role": "ADMIN"
+}
+
+###
+
+PUT http://localhost:8080/api/pizza
+Content-Type: application/json
+{
+  "username": "rest",
+  "password": "rest",
+  "role": "USER"
+}
+
+###
+GET http://localhost:8080/api/appUser
+Accept: application/json
+
+###
+
+DELETE http://localhost:8080/api/appUser/6
+Accept: application/json
+
+###
+
+

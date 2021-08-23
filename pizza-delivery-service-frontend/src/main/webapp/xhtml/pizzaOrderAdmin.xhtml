@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui"
+      xmlns:crud="http://java.sun.com/jsf/composite/crud"
+      xml:lang="en" lang="en">
+<body>
+<ui:composition template="layout/mainTemplate.xhtml">
+
+  <ui:define name="title">Pizza demo</ui:define>
+  <ui:define name="content">
+    <h:form id="form">
+      <p:growl id="growl" showDetail="false"/>
+      <crud:crudFunctions id="crudFunctions" bean="#{pizzaOrderCRUDMbean}" onCompleShowDialog="PF('pizzaOrderDialog').show()"
+                          onCompleUpdate="@([id$=pizzaOrderForm])" loggedUser="#{loggedInUserBean.isLoggedIn()}"/>
+
+
+  <p:dataTable id="table" value="#{pizzaOrderCRUDMbean.list}" var="pizzaOrder" rows="10"
+               selectionMode="single" selection="#{pizzaOrderCRUDMbean.selectedEntity}" rowKey="#{pizzaOrder.id}"
+               paginator="true"
+               paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+               currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+               rowsPerPageTemplate="5,10,{ShowAll|'All'}">
+    <p:ajax event="rowSelect" update="@form"/>
+    <p:column toggleable="false" sortBy="#{pizzaOrder.id}" filterBy="#{pizzaOrder.id}" filterMatchMode="contains"
+              headerText="ID">
+      <h:outputText value="#{pizzaOrder.id}"/>
+
+    </p:column>
+
+    <p:column sortBy="#{pizzaOrder.createDate}" filterBy="#{pizzaOrder.createDate}" headerText="Létrehozás dátuma"
+              filterMatchMode="contains">
+      <h:outputText value="#{pizzaOrder.createDate}"/>
+    </p:column>
+    <p:column sortBy="#{pizzaOrder.modificationDate}" filterBy="#{pizzaOrder.modificationDate}" headerText="Módosítás dátuma"
+              filterMatchMode="contains">
+      <h:outputText value="#{pizzaOrder.modificationDate}"/>
+    </p:column>
+
+
+    <p:column sortBy="#{pizzaOrder.creator.username}" filterBy="#{pizzaOrder.creator.username}" headerText="Létrehozó felhasználó"
+              filterMatchMode="contains">
+      <h:outputText value="#{pizzaOrder.creator.username}"/>
+    </p:column>
+    <p:column sortBy="#{pizzaOrder.modifierUser.username}" filterBy="#{pizzaOrder.modifierUser.username}" headerText="Módosító felhasználó"
+              filterMatchMode="contains">
+      <h:outputText value="#{pizzaOrder.modifierUser.username}"/>
+    </p:column>
+    <p:column sortBy="#{pizzaOrder.pizza.name}" filterBy="#{pizzaOrder.pizza.name}" headerText="Pizza"
+              filterMatchMode="contains">
+      <h:outputText value="#{pizzaOrder.pizza.name}"/>
+    </p:column>
+    <p:column sortBy="#{pizzaOrder.courier.firstName}" filterBy="#{pizzaOrder.courier.firstName}" headerText="Futár" filterMatchMode="contains">
+      <h:outputText value="#{pizzaOrder.courier.firstName}"/>
+    </p:column>
+    <p:column sortBy="#{pizzaOrder.settlement}" filterBy="#{pizzaOrder.settlement}" headerText="Település" filterMatchMode="contains">
+      <h:outputText value="#{pizzaOrder.settlement}"/>
+    </p:column>
+    <p:column sortBy="#{pizzaOrder.publicSpace}" filterBy="#{pizzaOrder.publicSpace}" headerText="Közterület" filterMatchMode="contains">
+      <h:outputText value="#{pizzaOrder.publicSpace}"/>
+    </p:column>
+    <p:column sortBy="#{pizzaOrder.publicSpaceType}" filterBy="#{pizzaOrder.publicSpaceType}" headerText="Közterület jellege" filterMatchMode="contains">
+      <h:outputText value="#{pizzaOrder.publicSpaceType}"/>
+    </p:column>
+    <p:column sortBy="#{pizzaOrder.houseNumber}" filterBy="#{pizzaOrder.houseNumber}" headerText="Ház szám" filterMatchMode="contains">
+    <h:outputText value="#{pizzaOrder.houseNumber}"/>
+  </p:column>
+
+
+
+  </p:dataTable>
+
+  <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+    <p:commandButton value="Nem" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+    <p:commandButton value="Igen" type="button" styleClass="ui-confirmdialog-yes"/>
+  </p:confirmDialog>
+
+</h:form>
+
+<p:dialog id="pizzaOrderDialog" widgetVar="pizzaOrderDialog" header="Form" modal="true" closable="true">
+  <h:form id="pizzaOrderForm">
+    <p:panelGrid layout="grid" columns="2" id="formPanel" style="width:400px">
+
+      <p:outputLabel value="Pizza"/>
+      <p:selectOneMenu value="#{pizzaOrderCRUDMbean.selectedEntity.pizza}" converter="#{pizzaConverter}">
+        <f:selectItem itemValue="#{null}" itemLabel="Kérem válasszon"/>
+        <f:selectItems value="#{pizzaOrderCRUDMbean.pizzaList}" var="pizza"
+                       itemLabel="#{pizza.name}"
+                       itemValue="#{pizza}"/>
+      </p:selectOneMenu>
+
+      <p:outputLabel value="Futár"/>
+      <p:selectOneMenu value="#{pizzaOrderCRUDMbean.selectedEntity.courier}" converter="#{courierConverter}">
+        <f:selectItem itemValue="#{null}" itemLabel="Kérem válasszon"/>
+        <f:selectItems value="#{pizzaOrderCRUDMbean.courierList}" var="courier"
+                       itemLabel="#{courier.firstName}"
+                       itemValue="#{courier}"/>
+      </p:selectOneMenu>
+
+
+
+
+
+      <p:outputLabel value="Település"/>
+      <p:inputText value="#{pizzaOrderCRUDMbean.selectedEntity.settlement}" required="true" requiredMessage="Település kötelező"/>
+
+      <p:outputLabel value="Közterület"/>
+      <p:inputText value="#{pizzaOrderCRUDMbean.selectedEntity.publicSpace}" required="true" requiredMessage="Közterület kötelező"/>
+
+      <p:outputLabel value="Közterület jellege"/>
+      <p:selectOneMenu value="#{pizzaOrderCRUDMbean.selectedEntity.publicSpaceType}" required="true"
+                       requiredMessage="Közterület jellege kötelező">
+        <f:selectItem itemValue="#{null}" itemLabel="Kérem válasszon"/>
+        <f:selectItem itemValue="KÖZ" itemLabel="KÖZ"/>
+        <f:selectItem itemValue="UTCA" itemLabel="UTCA"/>
+        <f:selectItem itemValue="LUGAS" itemLabel="LUGAS"/>
+      </p:selectOneMenu>
+
+      <p:outputLabel value="Ház szám"/>
+      <p:inputNumber thousandSeparator="" decimalPlaces="0"
+                     value="#{pizzaOrderCRUDMbean.selectedEntity.houseNumber}" required="true"
+                     requiredMessage="Ház szám közelező"/>
+
+      <p:commandButton value="Mentés" icon="pi pi-save" actionListener="#{pizzaOrderCRUDMbean.save()}"
+                       validateClient="true"
+                       process="formPanel" update=":form"/>
+    </p:panelGrid>
+  </h:form>
+</p:dialog>
+</ui:define>
+</ui:composition>
+        </body>
+        </html>

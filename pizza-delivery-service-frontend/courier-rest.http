@@ -1,0 +1,33 @@
+POST http://localhost:8080/api/courier
+Content-Type: application/json
+
+{
+  "firstName": "Teszt",
+  "lastName": "Elek",
+  "phoneNumber": "701234567"
+}
+
+###
+
+PUT http://localhost:8080/api/courier
+Content-Type: application/json
+
+{
+  "id": 3,
+  "firstName": "Teszt",
+  "lastName": "Előd",
+  "phoneNumber": "707654321"
+}
+
+###
+GET http://localhost:8080/api/courier
+Accept: application/json
+
+###
+
+DELETE http://localhost:8080/api/courier/3
+Accept: application/json
+
+###
+
+
