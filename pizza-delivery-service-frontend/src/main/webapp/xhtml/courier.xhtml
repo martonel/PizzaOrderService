@@ -57,7 +57,8 @@
         </p:column>
 
 
-        <p:column converter="phoneConverter" sortBy="#{courier.phoneNumber}" filterBy="#{courier.phoneNumber}" headerText="Telefonszám" filterMatchMode="contains">
+        <p:column mask="(99) 999-9999" validateMask="true"
+                sortBy="#{courier.phoneNumber}" filterBy="#{courier.phoneNumber}" headerText="Telefonszám" filterMatchMode="contains">
             <h:outputText value="#{courier.phoneNumber}"/>
         </p:column>
     </p:dataTable>
@@ -80,7 +81,7 @@
             <p:inputText value="#{courierCRUDMbean.selectedEntity.lastName}" required="true" requiredMessage="Vezetéknév kötelező"/>
 
             <p:outputLabel value="Telefonszám"/>
-            <p:inputNumber thousandSeparator="" decimalPlaces="0"
+            <p:inputMask id="phone" mask="(99) 999-9999" validateMask="true"
                            value="#{courierCRUDMbean.selectedEntity.phoneNumber}" required="true"
                          requiredMessage="Telefonszám kötelező"/>
 
