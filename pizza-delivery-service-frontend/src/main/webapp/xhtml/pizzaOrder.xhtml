@@ -17,7 +17,7 @@
                           onCompleUpdate="@([id$=pizzaOrderForm])" loggedUser="#{loggedInUserBean.isLoggedIn()}"/>
 
 
-  <p:dataTable id="table" value="#{pizzaOrderCRUDMbean.list}" var="pizzaOrder" rows="10"
+  <p:dataTable id="table" value="#{pizzaOrderCRUDMbean.selectedList}" var="pizzaOrder" rows="10"
                selectionMode="single" selection="#{pizzaOrderCRUDMbean.selectedEntity}" rowKey="#{pizzaOrder.id}"
                paginator="true"
                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

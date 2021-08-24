@@ -15,6 +15,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class PizzaOrderCRUDMbean extends CoreAwareCRUDMbean<PizzaOrder> implemen
         pizzaList = pizzaService.getAll();
         courierList = courierService.getAll();
         loginModel = loggedInUserBean.getModel().getUsername();
-        //SetSelectedList();
+        SetSelectedList();
         if (!loggedInUserBean.isLoggedIn()) {
             throw new SecurityException("Nincs elég jogosultság!");
         }
@@ -77,15 +78,16 @@ public class PizzaOrderCRUDMbean extends CoreAwareCRUDMbean<PizzaOrder> implemen
     }
 
     public void SetSelectedList(){
+        selectedList = new ArrayList<>();
         for (PizzaOrder order : service.getAll()) {
-            /*if (!loginModel.isEmpty()) {
+            if (!loginModel.isEmpty()) {
                 if (order.getCreator().getUsername().equals(loginModel)) {
                     selectedList.add(order);
                 }
             }
-             */
-            selectedList.add(order);
+
         }
+
     }
 
 }
