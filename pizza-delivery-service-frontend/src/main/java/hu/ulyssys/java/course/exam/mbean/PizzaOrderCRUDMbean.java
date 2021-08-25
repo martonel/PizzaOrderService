@@ -27,13 +27,12 @@ public class PizzaOrderCRUDMbean extends CoreAwareCRUDMbean<PizzaOrder> implemen
 
     private List<Courier> courierList;
 
-    private String loginModel;
     @Inject
     public PizzaOrderCRUDMbean(CoreService<PizzaOrder> service, AppUserService userService, PizzaService pizzaService, CourierService courierService,LoggedInUserBean loggedInUserBean) {
         super(service, userService);
         pizzaList = pizzaService.getAll();
         courierList = courierService.getAll();
-        loginModel = loggedInUserBean.getModel().getUsername();
+        this.loggedInUserBean = loggedInUserBean;
         SetSelectedList();
         if (!loggedInUserBean.isLoggedIn()) {
             throw new SecurityException("Nincs elég jogosultság!");
@@ -80,12 +79,11 @@ public class PizzaOrderCRUDMbean extends CoreAwareCRUDMbean<PizzaOrder> implemen
     public void SetSelectedList(){
         selectedList = new ArrayList<>();
         for (PizzaOrder order : service.getAll()) {
-            if (!loginModel.isEmpty()) {
-                if (order.getCreator().getUsername().equals(loginModel)) {
+            if (loggedInUserBean!=null) {
+                if (order.getCreator().getUsername().equals(loggedInUserBean.getModel().getUsername())) {
                     selectedList.add(order);
                 }
             }
-
         }
 
     }
